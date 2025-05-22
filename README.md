@@ -12,6 +12,7 @@ BookAIReader is a Streamlit application that allows you to interact with PDF doc
     The "Comprehensive" option provides a detailed breakdown including main ideas, useful information, and quotable passages.
 -   **Terminology and Concept Explanation:** Enter a term or phrase from the PDF (or any text) and optionally provide surrounding context. The AI will define the term, explain it in context (if provided), and list related concepts. This is useful for quickly understanding jargon or complex ideas.
 -   **Experimental Misinformation Detection:** Paste a segment of text to analyze it for potential misinformation. The AI will identify controversial claims or statements that may lack evidence and provide a brief assessment. This feature is experimental and should be used with caution, always verifying information from reputable sources.
+-   **Sentiment Analysis:** Analyze a segment of text to determine its sentiment (e.g., positive, negative, neutral) along with an explanation.
 
 ## How to Use
 
@@ -30,6 +31,10 @@ BookAIReader is a Streamlit application that allows you to interact with PDF doc
     *   Expand the "🧪 Experimental: Misinformation Detection" section.
     *   Paste the "text segment to analyze" into the text area.
     *   Click "Analyze for Potential Misinformation". The analysis will be displayed. Remember to critically evaluate the output and verify information.
+7.  **Analyze Text for Sentiment (for Sentiment Analysis):**
+    *   Navigate to the "Sentiment Analysis" section (it is not an expander).
+    *   Paste the "text segment to analyze" into the text area ("Enter text for sentiment analysis:").
+    *   Click "Analyze Sentiment". The analysis, including the sentiment and an explanation, will be displayed.
 
 ## Setup and Installation
 
