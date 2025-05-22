@@ -98,6 +98,26 @@ Please provide:
     return call_llm(prompt, model_name)
 
 
+def analyze_sentiment(text_segment, model_name):
+    """
+    Analyzes the sentiment of a text segment using an LLM.
+    """
+    prompt = f"""Analyze the sentiment of the following text segment.
+Classify the sentiment as 'Positive', 'Negative', or 'Neutral'.
+Provide a brief explanation for your classification.
+Optionally, include a confidence score for your classification.
+
+Text Segment:
+'{text_segment}'
+
+Format your response as:
+Sentiment: [Positive/Negative/Neutral]
+Confidence: [0.xx] (Optional)
+Explanation: [Your explanation]
+"""
+    return call_llm(prompt, model_name)
+
+
 def main():
     st.title("PDF Q&A App")
     uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
@@ -167,7 +187,31 @@ def main():
                 )
                 analyze_misinfo_submitted = st.form_submit_button("Analyze for Potential Misinformation")
 
-                if analyze_misinfo_submitted:
+            # Sentiment Analysis Section
+            st.subheader("Sentiment Analysis")
+            st.caption("Analyze a piece of text to determine its sentiment (Positive, Negative, or Neutral).")
+            sentiment_text_to_analyze = st.text_area("Enter text for sentiment analysis:", key="sentiment_text_area", height=150)
+            analyze_sentiment_submitted = st.form_submit_button("Analyze Sentiment")
+
+            if qa_submitted and query:
+                qa_prompt = f"Here is the entire book:\n\n{pdf_text}\n\nQuestion: {query}\nAnswer:"
+                answer = call_llm(qa_prompt, selected_model)
+                if answer:
+                    st.write("Answer:", answer)
+            
+            if generate_summary_submitted:
+                summary_info = extract_key_info(pdf_text, selected_model, summary_length, keywords)
+                if summary_info:
+                    with st.expander("Generated Summary", expanded=True):
+                        st.markdown(summary_info)
+            
+            if explain_term_submitted and term_to_explain:
+                explanation = explain_term(term_to_explain, surrounding_context, selected_model)
+                if explanation:
+                    st.markdown("### Explanation")
+                    st.markdown(explanation)
+
+            if analyze_misinfo_submitted:
                     if not misinfo_text_segment.strip():
                         st.error("Please paste some text to analyze.")
                     else:
@@ -175,6 +219,15 @@ def main():
                         if misinformation_analysis:
                             st.markdown("### Misinformation Analysis")
                             st.markdown(misinformation_analysis)
+            
+            if analyze_sentiment_submitted:
+                if not sentiment_text_to_analyze.strip():
+                    st.error("Please enter some text to analyze for sentiment.")
+                else:
+                    sentiment_result = analyze_sentiment(sentiment_text_to_analyze, selected_model)
+                    if sentiment_result:
+                        st.markdown("### Sentiment Analysis Result")
+                        st.markdown(sentiment_result)
 
 
 if __name__ == "__main__":
