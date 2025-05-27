@@ -1,41 +1,119 @@
-# BookAIReader
+# PDF Q&A and Analysis App (React + FastAPI)
 
-BookAIReader is a Streamlit application that allows you to interact with PDF documents using AI. You can ask questions about the content of a PDF or extract key information to quickly understand its main points.
+This project allows users to upload PDF documents and interact with them using Large Language Models (LLMs). Features include asking questions about the PDF content, generating summaries, explaining terms, detecting potential misinformation, and analyzing sentiment.
 
-## Features
+This version uses a React frontend and a FastAPI (Python) backend.
 
--   **Interactive Q&A:** Upload a PDF and ask questions about its content. The application uses Large Language Models (LLMs) to provide answers based on the document's text.
--   **Intelligent Summarization:** Get a customizable overview of your PDF. This feature allows you to:
-    -   Select summary length (Short, Medium, Long, Comprehensive).
-    -   Provide optional keywords to focus the summary on specific topics.
-    -   Receive a summary along with key sentences extracted from the text.
-    The "Comprehensive" option provides a detailed breakdown including main ideas, useful information, and quotable passages.
--   **Terminology and Concept Explanation:** Enter a term or phrase from the PDF (or any text) and optionally provide surrounding context. The AI will define the term, explain it in context (if provided), and list related concepts. This is useful for quickly understanding jargon or complex ideas.
--   **Experimental Misinformation Detection:** Paste a segment of text to analyze it for potential misinformation. The AI will identify controversial claims or statements that may lack evidence and provide a brief assessment. This feature is experimental and should be used with caution, always verifying information from reputable sources.
--   **Sentiment Analysis:** Analyze a segment of text to determine its sentiment (e.g., positive, negative, neutral) along with an explanation.
+## Prerequisites
 
-## How to Use
+*   Python 3.8+
+*   Node.js 16.x+ (which includes npm) or Yarn
 
-1.  **Upload a PDF:** Use the file uploader to select the PDF document you want to analyze. The application will process the text from the PDF.
-2.  **Select a Model:** Choose one of the available LLMs from the dropdown menu. Different models may provide different nuances in their responses.
-3.  **Ask a Question (for Q&A):** Type your question into the "Ask your question:" field and click "Submit Q&A". The answer will be displayed below.
-4.  **Generate a Summary (for Intelligent Summarization):**
-    *   Under "Intelligent Summarization", select your desired "summary length" from the dropdown.
-    *   Optionally, enter comma-separated "keywords/topics" to focus the summary.
-    *   Click "Generate Summary". The summary and key sentences will appear in an expandable section.
-5.  **Explain a Term (for Terminology and Concept Explanation):**
-    *   Under "Terminology and Concept Explanation", enter the "term or phrase to explain".
-    *   Optionally, paste some "surrounding context" from the PDF into the text area. Providing context helps generate more relevant explanations.
-    *   Click "Explain Term". The explanation will be displayed.
-6.  **Analyze Text for Misinformation (for Experimental Misinformation Detection):**
-    *   Expand the "🧪 Experimental: Misinformation Detection" section.
-    *   Paste the "text segment to analyze" into the text area.
-    *   Click "Analyze for Potential Misinformation". The analysis will be displayed. Remember to critically evaluate the output and verify information.
-7.  **Analyze Text for Sentiment (for Sentiment Analysis):**
-    *   Navigate to the "Sentiment Analysis" section (it is not an expander).
-    *   Paste the "text segment to analyze" into the text area ("Enter text for sentiment analysis:").
-    *   Click "Analyze Sentiment". The analysis, including the sentiment and an explanation, will be displayed.
+## Project Structure
 
-## Setup and Installation
+```
+.
+├── backend/        # FastAPI backend application
+│   ├── tests/      # Backend unit tests
+│   ├── main.py     # Main FastAPI application logic
+│   ├── requirements.txt # Python dependencies
+│   └── .env.example # Example environment file (user should create .env)
+├── frontend/       # React frontend application
+│   ├── src/
+│   │   ├── components/ # React components
+│   │   └── App.tsx     # Main React application component
+│   ├── package.json  # Node dependencies
+│   └── ...
+├── .gitignore
+├── LICENSE
+├── Makefile        # (May need updates if still used)
+├── README.md       # This file
+└── pyproject.toml  # (May relate to Python project setup, e.g., for linters/formatters)
+```
 
-(To be added: Detailed instructions on how to set up the local environment, install dependencies, and run the application.)
+## Backend Setup (FastAPI)
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+2.  **Create and activate a Python virtual environment:**
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Set up environment variables:**
+    Create a `.env` file in the `backend` directory by copying `.env.example`. This file will store your LLM API keys.
+    
+    Example `.env.example` content:
+    ```env
+    # LiteLLM Environment Variables
+    # Add API keys for the LLM providers you intend to use.
+    # Refer to LiteLLM documentation for specific variable names if needed.
+    # Examples:
+    # OPENAI_API_KEY="sk-your_openai_api_key"
+    # ANTHROPIC_API_KEY="sk-ant-your_anthropic_api_key"
+    # COHERE_API_KEY="your_cohere_api_key"
+    # HUGGINGFACE_API_KEY="hf_your_huggingface_api_key"
+    # GEMINI_API_KEY="your_gemini_api_key" # For Google Gemini models via LiteLLM
+    ```
+    **Note:** Ensure your LiteLLM setup in the backend (`main.py` or associated config) is prepared to use these environment variables for the models you select (e.g., "gemini/gemini-2.0-flash"). The `python-dotenv` library is used to load these variables.
+
+5.  **Run the backend server:**
+    ```bash
+    uvicorn main:app --reload --port 8000
+    ```
+    The backend API will be available at `http://localhost:8000`.
+
+## Frontend Setup (React)
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend 
+    ```
+    *(If you are in the `backend` directory, use `cd ../frontend`)*
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+    *(Or if you prefer Yarn: `yarn install`)*
+
+3.  **Run the frontend development server:**
+    ```bash
+    npm run dev
+    ```
+    *(Or `yarn dev`)*
+    The React application will typically open in your browser at `http://localhost:5173` (or another port if 5173 is busy, check your terminal output).
+
+4.  **Connecting to the Backend:**
+    The frontend is configured to connect to the backend API at `http://localhost:8000` (as defined in `frontend/src/App.tsx`). Ensure the backend server is running.
+
+## Model Configuration
+
+The selection of LLM models (e.g., "gemini/gemini-2.0-flash") is currently managed in the frontend (`App.tsx` has a placeholder list). For robust model management:
+*   Consider using the `models_config.json` file (if it exists from the original project and is still relevant) or a new configuration mechanism to populate the model selector in the frontend dynamically.
+*   Ensure that any model selected in the frontend is correctly configured and supported by your LiteLLM setup in the backend (including necessary API keys in the `.env` file).
+
+The original `models_config.py` may no longer be needed if its sole purpose was to serve the Streamlit application's model selection.
+
+## Original Streamlit Application
+
+The original Streamlit application (`app.py`) has been replaced by this React frontend and FastAPI backend. You may choose to archive or remove `app.py` and any Streamlit-specific configuration files that are no longer in use.
+
+## License
+
+This code is released under the MIT License. See the LICENSE file for details.
+
+## Linting and Formatting (Optional)
+
+This project may use tools like Black, Flake8 for Python, and Prettier, ESLint for TypeScript/React. Consider running them:
+*   Python (backend): `black .`, `flake8`
+*   TypeScript/React (frontend): `npm run lint`, `npm run format` (if scripts are configured in `package.json`)
