@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import PdfUploader from './components/PdfUploader';
-import QaSection from './components/QaSection';
+import ChatSection from './components/ChatSection';
 import SummarizationSection from './components/SummarizationSection';
 import TermExplanationSection from './components/TermExplanationSection';
 import MisinformationDetectionSection from './components/MisinformationDetectionSection';
@@ -60,9 +60,9 @@ function App() {
 
       {fileId && (
         <>
-          <section id="qa-section">
-            <h2>2. Ask Questions</h2>
-            <QaSection 
+          <section id="chat-section">
+            <h2>2. Chat with PDF</h2>
+            <ChatSection 
               fileId={fileId} 
               modelName={selectedModel} 
               apiBaseUrl={API_BASE_URL} 
